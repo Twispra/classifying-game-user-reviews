@@ -1,0 +1,17 @@
+import pandas as pd
+from sentence_transformers import SentenceTransformer
+
+# 加载预训练的 BERT 模型
+bert_model = SentenceTransformer("bert-base-nli-mean-tokens")
+
+# 读取清理后的评论
+df = pd.read_csv("data/clean_reviews.csv")
+
+# 对评论进行向量化
+embeddings = bert_model.encode(df['clean_reviews'].tolist(), show_progress_bar=True)
+
+# 将向量存储起来
+import numpy as np
+np.save("review_embeddings.npy", embeddings)
+
+print("BERT 向量化完成！")

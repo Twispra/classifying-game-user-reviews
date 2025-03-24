@@ -1,0 +1,12 @@
+import pandas as pd
+
+# 指定文件路径
+file_path = r"E:\Python pratice\game_reviews\cleaned_reviews.csv"
+
+# 读取CSV文件（假设列名为 "clean_review"）
+df = pd.read_csv(file_path)
+print("总评论数：", len(df))
+
+# 提取清洗后的文本列表
+clean_reviews = df["clean_review"].astype(str).tolist()
+print("示例评论：", clean_reviews[:3])

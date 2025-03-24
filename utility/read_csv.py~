@@ -1,0 +1,16 @@
+import pandas as pd
+import os
+
+data_path = "data/"  # 存放 CSV 文件的目录
+csv_files = [f for f in os.listdir(data_path) if f.endswith(".csv")]
+
+# 读取所有 CSV 文件并合并
+all_reviews = []
+for file in csv_files:
+    df = pd.read_csv(os.path.join(data_path, file))  # 读取 CSV
+    if "comment" in df.columns:
+        all_reviews.extend(df["comment"].dropna().tolist())  # 只获取评论内容，并去掉空值
+    else:
+        print(f"警告：{file} 没有 'review_text' 列，检查文件结构！")
+
+print(f"共读取 {len(all_reviews)} 条评论")

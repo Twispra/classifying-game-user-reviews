@@ -1,0 +1,39 @@
+import pandas as pd
+import re
+
+# 1. 加载CSV数据
+df = pd.read_csv("E:\Python pratice\game_reviews\Comments.csv")  # 请将文件名替换为实际的文件路径
+print("总评论数：", len(df))
+
+# 假定CSV有列 "review" 存储评论文本
+texts = df["review"].astype(str).tolist()
+
+# 2. 定义清洗函数
+def clean_text(text):
+    # 转小写
+    text = text.lower()
+    # 移除HTML标签等（如有）
+    text = re.sub(r'<.*?>', ' ', text)
+    # 保留字母、数字、空格和指定的标点符号 (字母和数字保留是为了不丢失有用信息)
+    # 这里保留字母数字以及 . ! ? ' 符号
+    text = re.sub(r"[^a-z0-9\s\.\!\?\'']", ' ', text)
+    # 将多个空格合并成一个空格
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+# 3. 应用清洗函数
+clean_texts = [clean_text(t) for t in texts]
+
+# 4. 可选：过滤非英文评论
+# 简单方法：如果评论中非ASCII字符比例较高，则认为非英文（更可靠的方法是使用 langdetect 库）
+clean_english_texts = []
+for t in clean_texts:
+    # 如果字符串中有超过一定比例的[a-z]字符，则认为是英文
+    english_char_count = sum(c.isalpha() for c in t)
+    if english_char_count / (len(t) + 1e-6) > 0.5:  # 超过50%字母字符
+        clean_english_texts.append(t)
+print("保留英文评论数：", len(clean_english_texts))
+
+# 更新DataFrame或列表用于后续处理
+df_clean = pd.DataFrame({"clean_review": clean_english_texts})
+df_clean.to_csv("cleaned_reviews.csv", index=False)
