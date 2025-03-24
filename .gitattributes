@@ -1,0 +1,2 @@
+*.npy filter=lfs diff=lfs merge=lfs -text
+game_domain_bert/*.bin filter=lfs diff=lfs merge=lfs -text
