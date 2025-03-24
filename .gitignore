@@ -4,7 +4,7 @@
 *.bin
 game_domain_bert/pytorch_model.bin
 game_bert/
-
+*.py~
 # 大型模型文件
 *.npy
 *.bin
